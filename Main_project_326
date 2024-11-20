@@ -1,3 +1,7 @@
-print("Hello world!")
-
-Hello there - Andrew
+class Caregiver:
+    def __init__(self, name, phone, email, payrate, hours):
+        self.name = name
+        self.phone = phone
+        self.email = email
+        self.payrate = payrate
+        self.hours = hours
