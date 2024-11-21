@@ -3,7 +3,7 @@ import calendar
 # Options for availability status
 AVAILABILITY_OPTIONS = ["preferred", "available", "unavailable"]
 
-# Function to create a default schedule where all shifts are marked as "available"
+# Function to create a default where all shifts are marked as "available"
 def create_default_schedule():
     schedule = {}
     for day in range(1, 8):  # Days of the week (Monday to Sunday)
@@ -80,7 +80,7 @@ def save_schedule_as_html(schedule):
         afternoon_shift = schedule[day]["1:00PM - 7:00PM"]
         html_schedule += f"<td><b>Morning:</b> {morning_shift}<br><b>Afternoon:</b> {afternoon_shift}</td>"
 
-    # Close HTML structure
+    # Close HTML program
     html_schedule += """
             </tr>
         </table>
@@ -88,7 +88,7 @@ def save_schedule_as_html(schedule):
     </html>
     """
 
-    # Save the HTML content to a file
+    # Save the HTML program to a file
     with open("shift_schedule.html", "w") as file:
         file.write(html_schedule)
 
