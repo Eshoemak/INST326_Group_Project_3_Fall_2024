@@ -1,0 +1,110 @@
+import calendar
+
+# Options for availability status
+AVAILABILITY_OPTIONS = ["preferred", "available", "unavailable"]
+
+# Function to create a default schedule where all shifts are marked as "available"
+def create_default_schedule():
+    schedule = {}
+    for day in range(1, 8):  # Days of the week (Monday to Sunday)
+        schedule[day] = {
+            "7:00AM - 1:00PM": "available",
+            "1:00PM - 7:00PM": "available"
+        }
+    return schedule
+
+# Function to update the schedule based on user input
+def update_schedule(schedule):
+    day_names = list(calendar.day_name)  # ['Monday', 'Tuesday', ...]
+
+    for day in range(1, 8):
+        print(f"\nSet availability for {day_names[day - 1]}:")
+
+        # Update the morning shift availability
+        morning_shift = input("Morning shift (7:00AM - 1:00PM): Enter 'preferred', 'available', or 'unavailable' (default: 'available'): ").strip().lower()
+        if morning_shift in AVAILABILITY_OPTIONS:
+            schedule[day]["7:00AM - 1:00PM"] = morning_shift
+
+        # Update the afternoon shift availability
+        afternoon_shift = input("Afternoon shift (1:00PM - 7:00PM): Enter 'preferred', 'available', or 'unavailable' (default: 'available'): ").strip().lower()
+        if afternoon_shift in AVAILABILITY_OPTIONS:
+            schedule[day]["1:00PM - 7:00PM"] = afternoon_shift
+
+    return schedule
+
+# Function to generate and save the schedule as an HTML table
+def save_schedule_as_html(schedule):
+    # HTML structure
+    html_schedule = """
+    <html>
+    <head>
+        <title>Shift Availability Schedule</title>
+        <style>
+            table {
+                border-collapse: collapse;
+                width: 100%;
+                margin: 20px 0;
+            }
+            th, td {
+                border: 1px solid black;
+                padding: 10px;
+                text-align: center;
+            }
+            th {
+                background-color: #f2f2f2;
+            }
+            td {
+                height: 100px;
+                vertical-align: top;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Shift Availability Schedule</h1>
+        <table>
+            <tr>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
+                <th>Sunday</th>
+            </tr>
+            <tr>
+    """
+
+    # Add schedule data for each day
+    for day in range(1, 8):
+        morning_shift = schedule[day]["7:00AM - 1:00PM"]
+        afternoon_shift = schedule[day]["1:00PM - 7:00PM"]
+        html_schedule += f"<td><b>Morning:</b> {morning_shift}<br><b>Afternoon:</b> {afternoon_shift}</td>"
+
+    # Close HTML structure
+    html_schedule += """
+            </tr>
+        </table>
+    </body>
+    </html>
+    """
+
+    # Save the HTML content to a file
+    with open("shift_schedule.html", "w") as file:
+        file.write(html_schedule)
+
+    print("The HTML shift schedule has been successfully generated and saved!")
+
+# Main program workflow
+if __name__ == "__main__":
+    print("Welcome to the Shift Availability Scheduler!")
+
+    # Step 1: Create a default schedule
+    schedule = create_default_schedule()
+
+    # Step 2: Allow user to update the schedule
+    print("\nSet your availability for each shift (7:00AM - 1:00PM and 1:00PM - 7:00PM).")
+    print("Availability options: 'preferred', 'available', 'unavailable'.")
+    schedule = update_schedule(schedule)
+
+    # Step 3: Generate and save the schedule as an HTML file
+    save_schedule_as_html(schedule)
