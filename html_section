@@ -1,5 +1,7 @@
-def display_schedule_as_html(schedule):
-    # Define CSS styles
+import calendar
+
+def display_schedule_as_html(schedule, year, month):
+    # Generate CSS styles
     def get_css_styles():
         return """
         <style>
@@ -23,61 +25,75 @@ def display_schedule_as_html(schedule):
         </style>
         """
 
-    # Define the HTML head
+    # Generate HTML head
     def get_html_head():
         return f"""
         <head>
-            <title>User Availability Schedule</title>
+            <title>Work Schedule for {calendar.month_name[month]} {year}</title>
             {get_css_styles()}
         </head>
         """
 
-    # Generate the HTML body start
-    def get_html_body_start():
+    # Generate the table header
+    def get_table_header():
         return """
-        <body>
-            <h1>User Availability Schedule</h1>
-            <table>
-                <tr>
-                    <th>Mon</th>
-                    <th>Tue</th>
-                    <th>Wed</th>
-                    <th>Thu</th>
-                    <th>Fri</th>
-                    <th>Sat</th>
-                    <th>Sun</th>
-                </tr>
-                <tr>
+        <table>
+            <tr>
+                <th>Mon</th>
+                <th>Tue</th>
+                <th>Wed</th>
+                <th>Thu</th>
+                <th>Fri</th>
+                <th>Sat</th>
+                <th>Sun</th>
+            </tr>
         """
 
-    # Generate table cells for the schedule
-    def get_table_cells(schedule):
-        html_cells = ""
-        for day in range(1, 8):  # Assuming schedule uses 1-7 for Mon-Sun
-            morning_shift = schedule[day]["7:00AM - 1:00PM"]
-            afternoon_shift = schedule[day]["1:00PM - 7:00PM"]
-            html_cells += f"""
-            <td>
-                <b>Morning:</b> {morning_shift}<br>
-                <b>Afternoon:</b> {afternoon_shift}
-            </td>
-            """
-        return html_cells
+    # Generate the table rows for the schedule
+    def get_table_rows(schedule, year, month):
+        first_weekday, num_days = calendar.monthrange(year, month)
+        current_day = 1
+        html_rows = ""
 
-    # Combine all parts of the HTML
+        # Calculate rows for the month
+        for week in range((num_days + first_weekday) // 7 + 1):
+            html_rows += "<tr>"
+            for day in range(7):
+                if (week == 0 and day < first_weekday) or current_day > num_days:
+                    html_rows += "<td></td>"  # Empty cell
+                else:
+                    shifts_for_day = schedule.get(current_day, {})
+                    morning_shift = shifts_for_day.get("7:00AM - 1:00PM", "N/A")
+                    afternoon_shift = shifts_for_day.get("1:00PM - 7:00PM", "N/A")
+
+                    html_rows += f"""
+                    <td>
+                        {current_day}<br>
+                        <b>AM:</b> {morning_shift}<br>
+                        <b>PM:</b> {afternoon_shift}
+                    </td>
+                    """
+                    current_day += 1
+            html_rows += "</tr>"
+        return html_rows
+
+    # Generate the complete HTML
     html_schedule = f"""
     <html>
         {get_html_head()}
-        {get_html_body_start()}
-        {get_table_cells(schedule)}
-        </tr>
-        </table>
+        <body>
+            <h1>Work Schedule for {calendar.month_name[month]} {year}</h1>
+            {get_table_header()}
+            {get_table_rows(schedule, year, month)}
+            </table>
         </body>
     </html>
     """
 
     # Write the HTML content to a file
-    with open("availability_schedule.html", "w") as file:
+    file_name = f"work_schedule_{year}_{month}.html"
+    with open(file_name, "w") as file:
         file.write(html_schedule)
 
-    print("HTML availability schedule generated successfully!")
+    print(f"HTML work schedule for {calendar.month_name[month]} {year} generated successfully!")
+
