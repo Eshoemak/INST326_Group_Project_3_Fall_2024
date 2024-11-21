@@ -135,7 +135,7 @@ display_schedule_as_html(schedule, year, month)
 
 
 
-alendar
+import calendar
 
 # Options for availability status
 AVAILABILITY_OPTIONS = ["preferred", "available", "unavailable"]
