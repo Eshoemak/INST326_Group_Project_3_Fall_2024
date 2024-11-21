@@ -1,6 +1,9 @@
+import calendar
+
 def display_schedule_as_html(schedule):
     # Define CSS styles
-    css_styles = """
+    def get_css_styles():
+        return """
         <style>
             table {
                 border-collapse: collapse;
@@ -20,29 +23,63 @@ def display_schedule_as_html(schedule):
                 vertical-align: top;
             }
         </style>
+        """
+
+    # Define the HTML head
+    def get_html_head():
+        return f"""
+        <head>
+            <title>User Availability Schedule</title>
+            {get_css_styles()}
+        </head>
+        """
+
+    # Generate the HTML body start
+    def get_html_body_start():
+        return """
+        <body>
+            <h1>User Availability Schedule</h1>
+            <table>
+                <tr>
+                    <th>Mon</th>
+                    <th>Tue</th>
+                    <th>Wed</th>
+                    <th>Thu</th>
+                    <th>Fri</th>
+                    <th>Sat</th>
+                    <th>Sun</th>
+                </tr>
+                <tr>
+        """
+
+    # Generate table cells for the schedule
+    def get_table_cells(schedule):
+        html_cells = ""
+        for day in range(1, 8):  # Assuming schedule uses 1-7 for Mon-Sun
+            morning_shift = schedule[day]["7:00AM - 1:00PM"]
+            afternoon_shift = schedule[day]["1:00PM - 7:00PM"]
+            html_cells += f"""
+            <td>
+                <b>Morning:</b> {morning_shift}<br>
+                <b>Afternoon:</b> {afternoon_shift}
+            </td>
+            """
+        return html_cells
+
+    # Combine all parts of the HTML
+    html_schedule = f"""
+    <html>
+        {get_html_head()}
+        {get_html_body_start()}
+        {get_table_cells(schedule)}
+        </tr>
+        </table>
+        </body>
+    </html>
     """
 
-    # Define HTML head
-    html_head = f"""
-    <head>
-        <title>User Availability Schedule</title>
-        {css_styles}
-    </head>
-    """
+    # Write the HTML content to a file
+    with open("availability_schedule.html", "w") as file:
+        file.write(html_schedule)
 
-    # Define HTML body with table header
-    html_body_start = """
-    <body>
-        <h1>User Availability Schedule</h1>
-        <table>
-            <tr>
-                <th>Mon</th>
-                <th>Tue</th>
-                <th>Wed</th>
-                <th>Thu</th>
-                <th>Fri</th>
-                <th>Sat</th>
-                <th>Sun</th>
-            </tr>
-    """
-
+    print("HTML availability schedule generated successfully!")
