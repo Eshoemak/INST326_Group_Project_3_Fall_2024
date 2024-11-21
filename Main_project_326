@@ -1,4 +1,24 @@
 import calendar
+import random
+
+def schedule_generation(staff, year, month):
+    #define shifts
+    shifts = ["7:00AM - 1:00PM", "1:00PM - 7:00PM"]
+
+    #get number of days
+    day_count = calendar.monthrange(year, month)[1]
+
+    #shift assignment
+    schedule = {}
+    for day in range(1, day_count + 1):
+        schedule[day] = {
+            shifts[0]: random.choice(staff), 
+            shifts[1]: random.choice(staff)  
+        }
+
+    return schedule
+
+import calendar
 
 def display_schedule_as_html(schedule):
     # Define CSS styles
