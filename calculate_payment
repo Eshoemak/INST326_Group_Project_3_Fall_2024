@@ -1,17 +1,17 @@
 import calendar
 import random
 
-# Define constants
+#rate
 HOURLY_RATE = 20  # $20/hour
 
 def schedule_generation(staff, year, month):
-    # Define shifts
+    #shifts
     shifts = ["7:00AM - 1:00PM", "1:00PM - 7:00PM"]
 
-    # Get number of days
+    #number of days
     day_count = calendar.monthrange(year, month)[1]
 
-    # Shift assignment
+    #shift assignment
     schedule = {}
     for day in range(1, day_count + 1):
         schedule[day] = {
@@ -22,11 +22,11 @@ def schedule_generation(staff, year, month):
     return schedule
 
 def display_schedule_as_html(schedule, year, month):
-    # Create the calendar object
+    #calander
     cal = calendar.HTMLCalendar()
     html_calendar = cal.formatmonth(year, month)
 
-    # Embed shifts into the calendar
+    #put the shifts in calandar
     html_calendar = html_calendar.replace(
         "<table", '<table border="1" cellpadding="5" cellspacing="0"'
     )
@@ -37,29 +37,29 @@ def display_schedule_as_html(schedule, year, month):
             f' bgcolor="#FFD700">{day}<br>{shift_info}<'
         )
 
-    # Write the HTML to a file
+    # write html to file
     with open("schedule.html", "w") as file:
         file.write(html_calendar)
 
     print("Schedule has been successfully saved as 'schedule.html'!")
 
 def calculate_payment(schedule, staff, hours_per_shift=6):
-    # Initialize payment dictionary
+    #payment dictionary
     payments = {person: 0 for person in staff}
     total_weekly_hours = 0
 
-    # Iterate over the schedule to calculate hours and pay
+    #calculate hours and pay
     for day_shifts in schedule.values():
         for shift, person in day_shifts.items():
             payments[person] += hours_per_shift
             total_weekly_hours += hours_per_shift
 
-    # Calculate gross weekly pay and monthly projection
+    #gross weekly pay and monthly estimate
     weekly_gross_pay = {person: payments[person] * HOURLY_RATE for person in payments}
     total_weekly_gross = sum(weekly_gross_pay.values())
     total_monthly_gross = total_weekly_gross * 4  # Approximate 4 weeks in a month
 
-    # Generate the report text
+    #report
     report = "Caregiver Weekly Payment Report\n"
     report += "--------------------------------\n"
     for person, pay in weekly_gross_pay.items():
@@ -68,24 +68,20 @@ def calculate_payment(schedule, staff, hours_per_shift=6):
     report += f"Total Weekly Gross Pay: ${total_weekly_gross:.2f}\n"
     report += f"Projected Monthly Gross Pay: ${total_monthly_gross:.2f}\n"
 
-    # Write the report to a text file
+    # write report to text file
     with open("payment_report.txt", "w") as file:
         file.write(report)
 
     print("Payment report has been successfully generated and saved as 'payment_report.txt'!")
 
-# Sample list of people to assign
-staff = ["Emily", "Andrew", "Jaylen", "Christopher", "Peter", "Chris", "Brian"]
+#run code
+staff = ["Emily", "Jaylen", "Andrew", "Scott", "Ammanda", "Joe", "Daryll"]
 
-# Get user input for the year and month
 year = int(input("Enter the year: "))
 month = int(input("Enter the month (1-12): "))
 
-# Generate the work schedule
 schedule = schedule_generation(staff, year, month)
 
-# Display the schedule as an HTML calendar
 display_schedule_as_html(schedule, year, month)
 
-# Calculate and generate the payment report
 calculate_payment(schedule, staff)

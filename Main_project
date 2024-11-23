@@ -1,3 +1,24 @@
+# CALANDAR CREATION
+import calendar
+import random
+
+def schedule_generation(staff, year, month):
+    #define shifts
+    shifts = ["7:00AM - 1:00PM", "1:00PM - 7:00PM"]
+
+    #get number of days
+    day_count = calendar.monthrange(year, month)[1]
+
+    #shift assignment
+    schedule = {}
+    for day in range(1, day_count + 1):
+        schedule[day] = {
+            shifts[0]: random.choice(staff), 
+            shifts[1]: random.choice(staff)  
+        }
+
+    return schedule
+
 import calendar
 import random
 
@@ -20,7 +41,6 @@ def schedule_generation(staff, year, month):
 import calendar
 
 def display_schedule_as_html(schedule, year, month):
-    # Generate CSS styles
     def get_css_styles():
         return """
         <style>
@@ -44,7 +64,7 @@ def display_schedule_as_html(schedule, year, month):
         </style>
         """
 
-    # Generate HTML head
+    #html head
     def get_html_head():
         return f"""
         <head>
@@ -53,7 +73,7 @@ def display_schedule_as_html(schedule, year, month):
         </head>
         """
 
-    # Generate the table header
+    #table header
     def get_table_header():
         return """
         <table>
@@ -68,13 +88,13 @@ def display_schedule_as_html(schedule, year, month):
             </tr>
         """
 
-    # Generate the table rows for the schedule
+    #table rows
     def get_table_rows(schedule, year, month):
         first_weekday, num_days = calendar.monthrange(year, month)
         current_day = 1
         html_rows = ""
 
-        # Calculate rows for the month
+        #monthly rows
         for week in range((num_days + first_weekday) // 7 + 1):
             html_rows += "<tr>"
             for day in range(7):
@@ -96,7 +116,7 @@ def display_schedule_as_html(schedule, year, month):
             html_rows += "</tr>"
         return html_rows
 
-    # Generate the complete HTML
+    #complete html
     html_schedule = f"""
     <html>
         {get_html_head()}
@@ -109,24 +129,22 @@ def display_schedule_as_html(schedule, year, month):
     </html>
     """
 
-    # Write the HTML content to a file
+    #html file
     file_name = f"work_schedule_{year}_{month}.html"
     with open(file_name, "w") as file:
         file.write(html_schedule)
 
     print(f"HTML work schedule for {calendar.month_name[month]} {year} generated successfully!")
 
-# Sample list of people to assign
-staff = ["Alice", "Bob", "Charlie", "David", "Eve", "Frank", "Grace"]
 
-# Get user input for the year and month
+#run code
+staff = ["Emily", "Jaylen", "Andrew", "Scott", "Ammanda", "Joe", "Daryll"]
+
 year = int(input("Enter the year: "))
 month = int(input("Enter the month (1-12): "))
 
-# Generate the work schedule
 schedule = schedule_generation(staff, year, month)
 
-# Display the schedule as an HTML calendar
 display_schedule_as_html(schedule, year, month)
 
 
@@ -135,43 +153,46 @@ display_schedule_as_html(schedule, year, month)
 
 
 
+
+
+
+#SCEDULE AVAILABILITY 
 import calendar
 
-# Options for availability status
+#availability status
 AVAILABILITY_OPTIONS = ["preferred", "available", "unavailable"]
 
-# Function to create a default schedule where all shifts are marked as "available"
+#default schedule
 def create_default_schedule():
     schedule = {}
-    for day in range(1, 8):  # Days of the week (Monday to Sunday)
+    for day in range(1, 8):
         schedule[day] = {
             "7:00AM - 1:00PM": "available",
             "1:00PM - 7:00PM": "available"
         }
     return schedule
 
-# Function to update the schedule based on user input
+#update schedule 
 def update_schedule(schedule):
-    day_names = list(calendar.day_name)  # ['Monday', 'Tuesday', ...]
+    day_names = list(calendar.day_name)
 
     for day in range(1, 8):
         print(f"\nSet availability for {day_names[day - 1]}:")
 
-        # Update the morning shift availability
+        #morning shift availability
         morning_shift = input("Morning shift (7:00AM - 1:00PM): Enter 'preferred', 'available', or 'unavailable' (default: 'available'): ").strip().lower()
         if morning_shift in AVAILABILITY_OPTIONS:
             schedule[day]["7:00AM - 1:00PM"] = morning_shift
 
-        # Update the afternoon shift availability
+        #afternoon shift availability
         afternoon_shift = input("Afternoon shift (1:00PM - 7:00PM): Enter 'preferred', 'available', or 'unavailable' (default: 'available'): ").strip().lower()
         if afternoon_shift in AVAILABILITY_OPTIONS:
             schedule[day]["1:00PM - 7:00PM"] = afternoon_shift
 
     return schedule
 
-# Function to generate and save the schedule as an HTML table
+#save schedule as html table
 def save_schedule_as_html(schedule):
-    # HTML structure
     html_schedule = """
     <html>
     <head>
@@ -211,13 +232,13 @@ def save_schedule_as_html(schedule):
             <tr>
     """
 
-    # Add schedule data for each day
+    #schedule data per day
     for day in range(1, 8):
         morning_shift = schedule[day]["7:00AM - 1:00PM"]
-        afternoon_shift = schedule[day]["1:00PM - 7:00PM"]
+        afternoon_shift = schedule[day]["1:00PM -7:00PM"]
         html_schedule += f"<td><b>Morning:</b> {morning_shift}<br><b>Afternoon:</b> {afternoon_shift}</td>"
 
-    # Close HTML structure
+    #close html
     html_schedule += """
             </tr>
         </table>
@@ -225,24 +246,129 @@ def save_schedule_as_html(schedule):
     </html>
     """
 
-    # Save the HTML content to a file
+    # save html to file
     with open("shift_schedule.html", "w") as file:
         file.write(html_schedule)
 
     print("The HTML shift schedule has been successfully generated and saved!")
     print("Welcome to the Shift Availability Scheduler!")
 
-    # Step 1: Create a default schedule
+    #run code
     schedule = create_default_schedule()
 
-    # Step 2: Allow user to update the schedule
     print("\nSet your availability for each shift (7:00AM - 1:00PM and 1:00PM - 7:00PM).")
     print("Availability options: 'preferred', 'available', 'unavailable'.")
     schedule = update_schedule(schedule)
 
-    # Step 3: Generate and save the schedule as an HTML file
     save_schedule_as_html(schedule)
 
 
-# Main program workflow
+# main program
 if __name__ == "__main__":
+    print("Welcome to the Shift Availability Scheduler")
+
+    schedule = create_default_schedule()
+
+    print("\nYou can set your availability for each shift (7:00AM - 1:00PM and 1:00PM - 7:00PM).")
+    print("You have three options for availability: 'preferred', 'available', and 'unavailable'.")
+    schedule = update_schedule(schedule)
+
+    display_schedule_as_html(schedule, year, month)
+
+
+
+
+
+
+
+
+
+
+#CALCULATE PAYMENT 
+import calendar
+import random
+
+#rate
+HOURLY_RATE = 20  # $20/hour
+
+def schedule_generation(staff, year, month):
+    #shifts
+    shifts = ["7:00AM - 1:00PM", "1:00PM - 7:00PM"]
+
+    #number of days
+    day_count = calendar.monthrange(year, month)[1]
+
+    #shift assignment
+    schedule = {}
+    for day in range(1, day_count + 1):
+        schedule[day] = {
+            shifts[0]: random.choice(staff), 
+            shifts[1]: random.choice(staff)
+        }
+
+    return schedule
+
+def display_schedule_as_html(schedule, year, month):
+    #calander
+    cal = calendar.HTMLCalendar()
+    html_calendar = cal.formatmonth(year, month)
+
+    #put the shifts in calandar
+    html_calendar = html_calendar.replace(
+        "<table", '<table border="1" cellpadding="5" cellspacing="0"'
+    )
+    for day, shifts in schedule.items():
+        shift_info = "<br>".join(f"{time}: {person}" for time, person in shifts.items())
+        html_calendar = html_calendar.replace(
+            f'>{day}<',
+            f' bgcolor="#FFD700">{day}<br>{shift_info}<'
+        )
+
+    # write html to file
+    with open("schedule.html", "w") as file:
+        file.write(html_calendar)
+
+    print("Schedule has been successfully saved as 'schedule.html'!")
+
+def calculate_payment(schedule, staff, hours_per_shift=6):
+    #payment dictionary
+    payments = {person: 0 for person in staff}
+    total_weekly_hours = 0
+
+    #calculate hours and pay
+    for day_shifts in schedule.values():
+        for shift, person in day_shifts.items():
+            payments[person] += hours_per_shift
+            total_weekly_hours += hours_per_shift
+
+    #gross weekly pay and monthly estimate
+    weekly_gross_pay = {person: payments[person] * HOURLY_RATE for person in payments}
+    total_weekly_gross = sum(weekly_gross_pay.values())
+    total_monthly_gross = total_weekly_gross * 4  # Approximate 4 weeks in a month
+
+    #report
+    report = "Caregiver Weekly Payment Report\n"
+    report += "--------------------------------\n"
+    for person, pay in weekly_gross_pay.items():
+        report += f"{person}: ${pay:.2f} (Weekly Hours: {payments[person]})\n"
+    report += "--------------------------------\n"
+    report += f"Total Weekly Gross Pay: ${total_weekly_gross:.2f}\n"
+    report += f"Projected Monthly Gross Pay: ${total_monthly_gross:.2f}\n"
+
+    # write report to text file
+    with open("payment_report.txt", "w") as file:
+        file.write(report)
+
+    print("Payment report has been successfully generated and saved as 'payment_report.txt'!")
+
+#run code
+staff = ["Emily", "Jaylen", "Andrew", "Scott", "Ammanda", "Joe", "Daryll"]
+
+year = int(input("Enter the year: "))
+month = int(input("Enter the month (1-12): "))
+
+schedule = schedule_generation(staff, year, month)
+
+display_schedule_as_html(schedule, year, month)
+
+calculate_payment(schedule, staff)
